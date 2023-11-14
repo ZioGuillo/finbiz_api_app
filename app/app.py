@@ -1,7 +1,24 @@
+import time
 from flask import Flask, request, jsonify
 from stocks import stocks_app
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
+
+# Initialize metrics
+metrics = PrometheusMetrics(app)
+
+# Optional: Add some default metrics for all requests
+@app.before_request
+def before_request():
+    request.start_time = time.time()
+
+@app.after_request
+def after_request(response):
+    request_latency = time.time() - request.start_time
+    metrics.histogram('flask_request_latency_seconds', 'Flask Request Latency',
+                      buckets=[0.1, 0.2, 0.5, 1, 2, 5]).observe(request_latency)
+    return response
 
 @app.route('/')
 def hello_world():
