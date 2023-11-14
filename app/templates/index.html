@@ -11,7 +11,9 @@
         <input type="submit" value="Analyze">
     </form>
 
-    {% if data %}
+    {% if error %}
+        <p>{{ error }}</p>
+    {% elif data %}
         <h2>Analysis Results:</h2>
         <div>
             <pre>{{ data | tojson(indent=2) }}</pre>
@@ -21,4 +23,3 @@
     {% endif %}
 </body>
 </html>
-

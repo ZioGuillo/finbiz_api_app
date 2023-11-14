@@ -2,29 +2,30 @@ from finvizfinance.quote import finvizfinance
 
 def process_stock_data(symbol):
     # Initialize the stock object
-    stock = finvizfinance(symbol)
-
-    # Fetch stock fundamentals
     try:
+        stock = finvizfinance(symbol)
         stock_fundamentals = stock.ticker_fundament()
+
+        # Extract the required data
         stock_price = float(stock_fundamentals.get('Price', 'N/A'))
+        per = stock_fundamentals.get('P/E', 'N/A')
+        fper = stock_fundamentals.get('Forward P/E', 'N/A')
+        beta = stock_fundamentals.get('Beta', 'N/A')
+        target_price = stock_fundamentals.get('Target Price', 'N/A')
+
+        processed_data = {
+            'symbol': symbol,
+            'Final Day Price': stock_price,
+            'PER': per,
+            'FPER': fper,
+            'Beta': beta,
+            'Target Price': target_price
+        }
+
     except Exception as e:
-        return {'error': str(e)}
-
-    # Extract the required data
-    per = stock_fundamentals.get('P/E', 'N/A')
-    fper = stock_fundamentals.get('Forward P/E', 'N/A')
-    beta = stock_fundamentals.get('Beta', 'N/A')
-    target_price = stock_fundamentals.get('Target Price', 'N/A')
-
-    processed_data = {
-        'symbol': symbol,
-        'Final Day Price': stock_price,
-        'PER': per,
-        'FPER': fper,
-        'Beta': beta,
-        'Target Price': target_price
-    }
+        # Handle specific error
+        return {'error': f'Unable to find data for symbol {symbol}'}
+        #return {'error': f'Unable to find data for symbol {symbol}: {str(e)}'}
 
     return processed_data
 

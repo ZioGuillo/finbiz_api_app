@@ -25,7 +25,8 @@ def analyze_data():
     symbol = request.args.get('symbol', None)
     if symbol:
         processed_data = process_stock_data(symbol)
+        if 'error' in processed_data:
+            return render_template('index.html', error=processed_data['error'])
         analyzed_data = analyze_stock(processed_data)
-        print(analyzed_data)  # Debugging line to check data structure
-        return render_template('index.html', data=analyzed_data, symbol=symbol)
-    return render_template('index.html', data=None, symbol=None)
+        return render_template('index.html', data=analyzed_data)
+    return render_template('index.html')
