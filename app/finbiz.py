@@ -110,13 +110,13 @@ def analyze_stock(stock_data):
     # Structuring the results with the stock symbol in uppercase as the primary key
     results = {
         symbol: {
-            "estimate_targets": {
+            "Estimate_targets": {
                 "Mensual Value Target Monthly": mensual_value_target_monthly,
                 "Target Price by Banks": target_price_by_banks,
                 "Target Price Indicator": target_price_indicator,
                 "Trimestral Value Objective": trimestral_value_objective
             },
-            "validation_based_on_estimated_targets": {
+            "Validation_based_on_estimated_targets": {
                 "Validation Objective Monthly": validation_objective_monthly,
                 "Validation Target Price": validation_target_price,
                 "Validation Target Indicators": validation_target_indicators,
@@ -124,27 +124,30 @@ def analyze_stock(stock_data):
                 "Present Value Counter": present_value_counter,
                 "Buy Validation": buy_validation
             },
-            "validation_based_on_target_price": {
+            "Validation_based_on_target_price": {
                 "Target Prices vs Objectives Monthly": target_prices_vs_objectives_monthly,
                 "Target Prices Indicators vs Target Prices Bank": target_prices_indicators_vs_target_prices_bank,
                 "Futures Values Count": futures_values_count
             },
-            "condition_validators": {
+            "Condition_validators": {
                 "Condition 1": condition1,
                 "Condition 2": condition2,
                 "Counter FUT + PRES": counter_fut_pres
             },
-            "final_validation": {
+            "Final_validation": {
                 "Decision Medium Term": decision_medium_term,
                 "Risk": risk,
                 "Decision Medium Term vs Risk": decision_medium_term_vs_risk,
                 "stock_grow": grow
             },
-            "stock_price": stock_price,
-            "percentage_var_month": percentage_var_month,
-            "var_puntual_month": var_puntual_month,
-            "percentage_var_3_month": percentage_var_3_month,
-            "var_puntual_3_month": var_puntual_3_month
+            "Stock_price": stock_price,
+            "PER": per,
+            "FPER": fper,
+            "Target Price": target_price_by_banks,
+            "Percentage_var_month": percentage_var_month,
+            "VAR_puntual_month": var_puntual_month,
+            "Percentage_var_3_month": percentage_var_3_month,
+            "VAR_puntual_3_month": var_puntual_3_month
         }
     }
 
