@@ -15,10 +15,9 @@ from flask_wtf.csrf import CSRFProtect
 # Load environment variables from .env file
 load_dotenv()
 app = Flask(__name__)
-csrf = CSRFProtect()
-csrf.init_app(app)
 
-app.config['WTF_CSRF_ENABLED'] = True # Sensitive
+csrf = CSRFProtect(app)
+
 # Get allowed origins from environment variables
 allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 
