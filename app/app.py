@@ -23,7 +23,7 @@ app.config['WTF_CSRF_ENABLED'] = True # Sensitive
 app.config['SECRET_KEY'] = base64.b64decode(os.getenv('SECRET_KEY'))
 app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE')
 
-CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "False"}}) # Compliant
+CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "True"}}) # Compliant
 
 origin = request.headers['ORIGIN']
 resp = Response()
