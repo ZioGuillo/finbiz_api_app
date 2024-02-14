@@ -11,6 +11,11 @@
 
         <h2>Stock Metrics</h2>
         <table>
+            <caption>Stock Metrics</caption>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Value</th>
+              </tr>
             <tr>
                 <td>PER</td>
                 <td>{{ results[symbol]['PER'] }}</td>
@@ -48,7 +53,13 @@
         <!-- Estimate Targets -->
         <h2>Estimate Targets</h2>
         <table>
+            <caption>Estimate targets</caption>
             <tbody>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                <tr>
                 <tr>
                     <td>Mensual Value Target Monthly</td>
                     <td>{{ results[symbol]['Estimate_targets']['Mensual Value Target Monthly'] }}</td>
@@ -72,7 +83,13 @@
         <h2>Validation Based on Estimated Targets</h2>
 
         <table>
+            <caption>Validation Based on Estimated Targets</caption>
             <tbody>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                <tr>
                 <tr>
                     <td>Buy Validation</td>
                     <td>{{ results[symbol]['Validation_based_on_estimated_targets']['Buy Validation'] }}</td>
@@ -104,7 +121,13 @@
         <!-- Validation Based on Target Price -->
         <h2>Validation Based on Target Price</h2>
         <table>
+            <caption>Validation Based on Target Price</caption>
             <tbody>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                <tr>
                 <tr>
                     <td>Target Prices vs Objectives Monthly</td>
                     <td>{{ results[symbol]['Validation_based_on_target_price']['Target Prices vs Objectives Monthly'] }}</td>
@@ -124,7 +147,13 @@
         <!-- Condition Validators -->
         <h2>Condition Validators</h2>
         <table>
+            <caption>Condition Validators</caption>
             <tbody>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                <tr>
                 <tr>
                     <td>Condition 1</td>
                     <td>{{ results[symbol]['Condition_validators']['Condition 1'] }}</td>
@@ -144,7 +173,13 @@
         <!-- Final Validation -->
         <h2>Final Validation</h2>
         <table>
+            <caption>Final Validation</caption>
             <tbody>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                <tr>
                 <tr>
                     <td>Decision Medium Term</td>
                     <td>{{ results[symbol]['Final_validation']['Decision Medium Term'] }}</td>
