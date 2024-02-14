@@ -24,6 +24,12 @@ app.config['SECRET_KEY'] = base64.b64decode(os.getenv('SECRET_KEY'))
 app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE')
 
 CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "False"}}) # Compliant
+
+origin = request.headers['ORIGIN']
+resp = Response()
+if origin in TRUSTED_ORIGINS:
+   resp.headers['Access-Control-Allow-Origin'] = origin
+   
 Session(app)
 
 metrics = PrometheusMetrics(app)
