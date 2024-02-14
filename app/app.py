@@ -18,7 +18,7 @@ app = Flask(__name__)
 csrf = CSRFProtect()
 csrf.init_app(app)
 
-app.config['WTF_CSRF_ENABLED'] = False # Sensitive
+app.config['WTF_CSRF_ENABLED'] = True # Sensitive
 # Get allowed origins from environment variables
 allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 
@@ -47,6 +47,7 @@ def health():
     return status, response_headers
 
 @app.route('/stocks/analyze', methods=['POST'])
+@csrf.exempt  # Exempt CSRF protection for this route
 def display_analysis():
     if request.method == 'POST':
         symbol = request.form.get('symbol').upper()
