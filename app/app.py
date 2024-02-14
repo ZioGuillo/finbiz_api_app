@@ -10,10 +10,13 @@ from flask_session import Session
 import os
 from dotenv import load_dotenv
 import base64
+from flask_wtf.csrf import CSRFProtect
 
 # Load environment variables from .env file
 load_dotenv()
 app = Flask(__name__)
+csrf = CSRFProtect()
+csrf.init_app(app)
 
 # Use environment variables for configuration
 app.config['SECRET_KEY'] = base64.b64decode(os.getenv('SECRET_KEY'))
@@ -26,6 +29,7 @@ metrics = PrometheusMetrics(app)
 metrics.info('app_info', 'Application info', version='1.0.4', app_name='finbiz_app')
 
 @app.route('/')
+@csrf.exempt
 def hello_world():
     return render_template('index.html')
 
@@ -39,6 +43,7 @@ def health():
     return status, response_headers
 
 @app.route('/stocks/analyze', methods=['GET', 'POST'])
+@csrf.exempt
 def display_analysis():
     if request.method == 'POST':
         symbol = request.form.get('symbol').upper()
@@ -62,6 +67,7 @@ def display_analysis():
         return redirect(url_for('show_analysis_results'))
 
 @app.route('/stocks/results')
+@csrf.exempt
 def show_analysis_results():
     analysis_results = session.get('analysis_results')
     symbol = session.get('symbol')
