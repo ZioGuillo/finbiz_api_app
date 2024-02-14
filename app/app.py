@@ -45,28 +45,28 @@ def health():
     ]
     return status, response_headers
 
-@app.route('/stocks/analyze', methods=['POST'])
+@app.route('/stocks/analyze', methods=['GET', 'POST'])
 def display_analysis():
     if request.method == 'POST':
         symbol = request.form.get('symbol').upper()
+    else:
+        symbol = request.args.get('symbol').upper() or session.get('symbol').upper()
 
-        if not symbol:
-            if request_wants_json():
-                return jsonify({"error": "No symbol provided"}), 400
-            else:
-                return redirect(url_for('hello_world'))
-
-        stock_data = process_stock_data(symbol)
-        analysis_results = analyze_stock(stock_data)
-
+    if not symbol:
         if request_wants_json():
-            return jsonify(analysis_results)
+            return jsonify({"error": "No symbol provided"}), 400
         else:
-            session['analysis_results'] = analysis_results
-            session['symbol'] = symbol
-            return redirect(url_for('show_analysis_results'))
+            return redirect(url_for('hello_world'))
 
-    return jsonify({"error": "Method not allowed"}), 405
+    stock_data = process_stock_data(symbol)
+    analysis_results = analyze_stock(stock_data)
+
+    if request_wants_json():
+        return jsonify(analysis_results)
+    else:
+        session['analysis_results'] = analysis_results
+        session['symbol'] = symbol
+        return redirect(url_for('show_analysis_results')), 200
 
 @app.route('/stocks/results')
 def show_analysis_results():
