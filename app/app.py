@@ -25,7 +25,7 @@ csrf = CSRFProtect(app)
 allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 
 # Use environment variables for configuration
-app.config['SECRET_KEY'] = base64.b64decode(os.getenv('SECRET_KEY'))
+app.config['SECRET_KEY'] = base64.b64decode(os.getenv('SECRET_KEY_ENV'))
 app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE')
 
 CORS(app, resources={r"/*": {"origins": allowed_origins, "send_wildcard": True}})
