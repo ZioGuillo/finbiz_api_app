@@ -17,7 +17,7 @@ load_dotenv()
 app = Flask(__name__)
 csrf = CSRFProtect()
 csrf.init_app(app)
-app.config['WTF_CSRF_ENABLED'] = False # Sensitive
+app.config['WTF_CSRF_ENABLED'] = True # Sensitive
 
 # Use environment variables for configuration
 app.config['SECRET_KEY'] = base64.b64decode(os.getenv('SECRET_KEY'))
