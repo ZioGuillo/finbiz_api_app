@@ -41,9 +41,9 @@ def health():
 @app.route('/stocks/analyze', methods=['GET', 'POST'])
 def display_analysis():
     if request.method == 'POST':
-        symbol = request.form.get('symbol')
+        symbol = request.form.get('symbol').upper()
     else:
-        symbol = request.args.get('symbol') or session.get('symbol')
+        symbol = request.args.get('symbol').upper() or session.get('symbol').upper()
 
     if not symbol:
         if request_wants_json():
