@@ -4,6 +4,7 @@ __pycache__
 *$py.class
 .venv/
 .env
+flask_session/
 
 # C extensions
 *.so
