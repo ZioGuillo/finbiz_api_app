@@ -43,7 +43,6 @@ def health():
     return status, response_headers
 
 @app.route('/stocks/analyze', methods=['GET', 'POST'])
-@csrf.exempt  # Exempt this route from CSRF protection
 def display_analysis():
     if request.method == 'POST':
         symbol = request.form.get('symbol').upper()
