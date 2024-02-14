@@ -17,7 +17,8 @@ load_dotenv()
 app = Flask(__name__)
 csrf = CSRFProtect()
 csrf.init_app(app)
-app.config['WTF_CSRF_ENABLED'] = True # Sensitive
+
+app.config['WTF_CSRF_ENABLED'] = False # Sensitive
 # Get allowed origins from environment variables
 allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 
@@ -45,28 +46,28 @@ def health():
     ]
     return status, response_headers
 
-@app.route('/stocks/analyze', methods=['GET', 'POST'])
+@app.route('/stocks/analyze', methods=['POST'])
 def display_analysis():
     if request.method == 'POST':
         symbol = request.form.get('symbol').upper()
-    else:
-        symbol = request.args.get('symbol').upper() or session.get('symbol').upper()
 
-    if not symbol:
+        if not symbol:
+            if request_wants_json():
+                return jsonify({"error": "No symbol provided"}), 400
+            else:
+                return redirect(url_for('hello_world'))
+
+        stock_data = process_stock_data(symbol)
+        analysis_results = analyze_stock(stock_data)
+
         if request_wants_json():
-            return jsonify({"error": "No symbol provided"}), 400
+            return jsonify(analysis_results)
         else:
-            return redirect(url_for('hello_world'))
+            session['analysis_results'] = analysis_results
+            session['symbol'] = symbol
+            return redirect(url_for('show_analysis_results'))
 
-    stock_data = process_stock_data(symbol)
-    analysis_results = analyze_stock(stock_data)
-
-    if request_wants_json():
-        return jsonify(analysis_results)
-    else:
-        session['analysis_results'] = analysis_results
-        session['symbol'] = symbol
-        return redirect(url_for('show_analysis_results'))
+    return jsonify({"error": "Method not allowed"}), 405
 
 @app.route('/stocks/results')
 def show_analysis_results():
