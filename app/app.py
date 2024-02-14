@@ -18,17 +18,14 @@ app = Flask(__name__)
 csrf = CSRFProtect()
 csrf.init_app(app)
 app.config['WTF_CSRF_ENABLED'] = True # Sensitive
+# Get allowed origins from environment variables
+allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 
 # Use environment variables for configuration
 app.config['SECRET_KEY'] = base64.b64decode(os.getenv('SECRET_KEY'))
 app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE')
 
-CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "True"}}) # Compliant
-
-origin = request.headers['ORIGIN']
-resp = Response()
-if origin in TRUSTED_ORIGINS:
-   resp.headers['Access-Control-Allow-Origin'] = origin
+CORS(app, resources={r"/*": {"origins": allowed_origins, "send_wildcard": True}})
    
 Session(app)
 
