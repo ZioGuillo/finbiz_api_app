@@ -11,6 +11,9 @@ import os
 from dotenv import load_dotenv
 import base64
 from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import generate_csrf
+from form_tool import FormTool  # Import the YourForm class from the appropriate module
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -47,6 +50,11 @@ def health():
 
 @app.route('/stocks/analyze', methods=['GET', 'POST'])
 def display_analysis():
+    
+    form = FormTool()
+    if form.validate_on_submit():
+        symbol = form.symbol.data.upper()
+
     if request.method == 'POST':
         symbol = request.form.get('symbol').upper()
     else:
@@ -66,17 +74,18 @@ def display_analysis():
     else:
         session['analysis_results'] = analysis_results
         session['symbol'] = symbol
-        return redirect(url_for('show_analysis_results')), 200
+        return redirect(url_for('show_analysis_results'))
 
 @app.route('/stocks/results')
 def show_analysis_results():
     analysis_results = session.get('analysis_results')
     symbol = session.get('symbol')
-
-    if not analysis_results or not symbol:
-        return redirect(url_for('hello_world'))
-
     return render_template('analysis_results.html', results=analysis_results, symbol=symbol)
+
+# Generate CSRF token for inclusion in the form
+@app.context_processor
+def inject_csrf_token():
+    return dict(csrf_token=generate_csrf())
 
 def request_wants_json():
     """Determine if the request prefers JSON."""
