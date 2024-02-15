@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
     <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<head>
     <title>Stock Analysis Tool</title>
 </head>
 <body>
@@ -13,5 +13,10 @@
         <input type="text" id="symbol" name="symbol" required>
         <input type="submit" value="Analyze">
     </form>
+    <!-- Footer Disclaimer -->
+    <footer>
+        <p>⚠️ Disclaimer: This Stock Analysis Application is intended for informational purposes only and should not be construed as financial advice, investment recommendations, or endorsements. The analysis provided by this tool is based on algorithms, market data, and historical trends, and may not accurately predict future performance. Investing in the stock market involves inherent risks, including the potential loss of principal. It's essential to conduct thorough research, consult with a qualified financial advisor, and carefully consider your own risk tolerance, investment goals, and financial situation before making any investment decisions.</p>
+    </footer>
 </body>
 </html>
+
