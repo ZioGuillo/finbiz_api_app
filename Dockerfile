@@ -4,10 +4,11 @@ FROM python:3.9-slim-buster
 # Set the working directory to /app
 WORKDIR /app
 
-# Copy only the requirements file to the container
-COPY ./app/requirements.txt .
+# Copy the current directory contents into the container at /app
+COPY ./app .
 
 # Install any needed packages specified in requirements.txt
+# RUN apt-get update && apt-get install -y python3 python3-pip
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         gcc \
@@ -16,11 +17,9 @@ RUN apt-get update && \
         && \
     rm -rf /var/lib/apt/lists/*
 
-# Install dependencies using pip
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the application code into the container
-COPY . .
+RUN pip install --upgrade pip --no-cache-dir
+RUN pip install --no-cache-dir -r requirements.txt --src /usr/local/src
+# RUN pip install gunicorn
 
 # Expose the port that the application will run on
 EXPOSE 5000
@@ -28,3 +27,5 @@ EXPOSE 5000
 # Run the command to start the application
 CMD [ "python", "app.py" ]
 # CMD gunicorn -w 4 --bind 0.0.0.0:5000 wsgi:app
+
+# docker run -d -p 80:5000 hello_app_prod 
