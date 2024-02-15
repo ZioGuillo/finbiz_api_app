@@ -13,6 +13,7 @@ import base64
 from flask_wtf.csrf import CSRFProtect
 from flask_wtf.csrf import generate_csrf
 from form_tool import FormTool  # Import the YourForm class from the appropriate module
+import binascii
 
 
 # Load environment variables from .env file
@@ -36,12 +37,14 @@ if padding != 0:
 # Decode the base64 encoded string
 try:
     decoded_secret_key = base64.b64decode(encoded_secret_key)
+    # Set the decoded secret key in the Flask app configuration
+    app.config['SECRET_KEY'] = decoded_secret_key
 except binascii.Error as e:
     print("Error decoding base64 string:", e)
     # Handle the error appropriately, such as logging and exiting the application
-
-# Set the decoded secret key in the Flask app configuration
-app.config['SECRET_KEY'] = decoded_secret_key
+except Exception as e:
+    print("An unexpected error occurred:", e)
+    # Handle the error appropriately, such as logging and exiting the application
 
 app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE')
 
