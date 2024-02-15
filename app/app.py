@@ -76,15 +76,20 @@ def display_analysis():
     if request_wants_json():
         return jsonify(analysis_results)
     else:
-        session['analysis_results'] = analysis_results
+        session['analysis_results'] = analysis_results[0]
+        session['final_validation_data'] = analysis_results[1]
         session['symbol'] = symbol
         return redirect(url_for('show_analysis_results'))
 
 @app.route('/stocks/results')
 def show_analysis_results():
     analysis_results = session.get('analysis_results')
+    final_validation_data = session.get('final_validation_data')  # Correct key to fetch final validation data
     symbol = session.get('symbol')
-    return render_template('analysis_results.html', results=analysis_results, symbol=symbol)
+    
+    return render_template('analysis_results.html', results=analysis_results, symbol=symbol, final_validation_data=final_validation_data)
+
+
 
 # Generate CSRF token for inclusion in the form
 @app.context_processor
@@ -104,4 +109,4 @@ def request_wants_json():
 app.register_blueprint(stocks_app, url_prefix='/stocks')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=8000, debug=True)
