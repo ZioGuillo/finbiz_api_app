@@ -20,14 +20,24 @@ import binascii
 load_dotenv()
 app = Flask(__name__)
 
-csrf = CSRFProtect(app)
-
 # Get allowed origins from environment variables
 allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 
 # Use environment variables for configuration
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY_ENV')
+# Retrieve the secret key from the Kubernetes secret
+secret_key_env = os.getenv('SECRET_KEY_ENV')
+
+if secret_key_env:
+    # Decode the base64 encoded secret key
+    secret_key_bytes = base64.b64decode(secret_key_env)
+    # Set the secret key in the Flask app configuration
+    app.config['SECRET_KEY'] = secret_key_bytes
+else:
+    raise RuntimeError("No secret key found in environment variable 'SECRET_KEY_ENV'")
+
 app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE')
+
+csrf = CSRFProtect(app)
 
 CORS(app, resources={r"/*": {"origins": allowed_origins, "send_wildcard": True}})
    
