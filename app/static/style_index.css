@@ -32,3 +32,43 @@ button {
 .block p {
     margin: 5px 0;
 }
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        width: auto; /* Full width on smaller screens */
+        margin: 10px; /* Less margin on smaller screens */
+        padding: 10px; /* Less padding on smaller screens */
+    }
+    h1 {
+        font-size: 24px; /* Smaller font size for the heading on small screens */
+    }
+}
+    /* Your existing styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #0047AB;
+        color: white;
+    }
+    tr:nth-child(even) {
+        background-color: hsl(0, 81%, 17%);
+    }
+    .container table tr:hover td {
+        background-color: transparent; /* Make cell background transparent on hover */
+    }
+    .sub-table {
+        border-collapse: collapse;
+    }
+    .sub-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
