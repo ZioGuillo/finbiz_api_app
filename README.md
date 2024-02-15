@@ -4,7 +4,7 @@ This application provides analysis for various stocks based on conditional valid
 
 You can test the app here: [Visit the Stock Analysis App](https://fintech.ibrain.dev)
 
-**Disclaimer:** This Stock Analysis Application is intended for informational purposes only and should not be construed as financial advice, investment recommendations, or endorsements. The analysis provided by this tool is based on algorithms, market data, and historical trends, and may not accurately predict future performance. Investing in the stock market involves inherent risks, including the potential loss of principal. It's essential to conduct thorough research, consult with a qualified financial advisor, and carefully consider your own risk tolerance, investment goals, and financial situation before making any investment decisions.
+**Disclaimer:***This Stock Analysis Application is intended for informational purposes only and should not be construed as financial advice, investment recommendations, or endorsements. The analysis provided by this tool is based on algorithms, market data, and historical trends, and may not accurately predict future performance. Investing in the stock market involves inherent risks, including the potential loss of principal. It's essential to conduct thorough research, consult with a qualified financial advisor, and carefully consider your own risk tolerance, investment goals, and financial situation before making any investment decisions.*</sup>
 
 ## Example Output
 
