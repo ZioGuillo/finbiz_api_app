@@ -26,30 +26,7 @@ csrf = CSRFProtect(app)
 allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 
 # Use environment variables for configuration
-# Get the base64 encoded secret key from the environment variable
-encoded_secret_key = os.getenv('SECRET_KEY_ENV')
-
-if encoded_secret_key:
-    # Add padding if necessary to make it a valid base64 string
-    padding = len(encoded_secret_key) % 4
-    if padding != 0:
-        encoded_secret_key += '=' * (4 - padding)
-
-    # Decode the base64 encoded string
-    try:
-        decoded_secret_key = base64.b64decode(encoded_secret_key)
-        # Set the decoded secret key in the Flask app configuration
-        app.config['SECRET_KEY'] = decoded_secret_key
-    except binascii.Error as e:
-        print("Error decoding base64 string:", e)
-        # Handle the error appropriately, such as logging and exiting the application
-    except Exception as e:
-        print("An unexpected error occurred:", e)
-        # Handle the error appropriately, such as logging and exiting the application
-else:
-    print("No secret key found in environment variable 'SECRET_KEY_ENV'")
-
-
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY_ENV')
 app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE')
 
 CORS(app, resources={r"/*": {"origins": allowed_origins, "send_wildcard": True}})
