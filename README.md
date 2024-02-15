@@ -66,7 +66,10 @@ Here's an example output for the analysis of the TSLA stock:
 
 - /health: Check the health status of the application.
 - /stocks/analyze: Analyze a specific stock.
-- /stocks/results: View the results of the stock analysis.
+
+```bash
+curl -H "Accept: application/json" https://localhost/stocks/analyze\?symbol\=tsla | jq
+```
 
 ## Technologies Used
 
