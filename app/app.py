@@ -28,17 +28,14 @@ allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 secret_key_env = os.getenv('SECRET_KEY_ENV')
 
 if secret_key_env:
-    # Add padding if necessary to make it a valid base64 string
-    padding = len(secret_key_env) % 4
-    if padding != 0:
-        secret_key_env += '=' * (4 - padding)
-
-    # Encode the string as UTF-8 before decoding it
-    encoded_secret_key_bytes = secret_key_env.encode('utf-8')
-    # Decode the base64 encoded secret key
-    secret_key_bytes = base64.b64decode(encoded_secret_key_bytes)
-    # Set the secret key in the Flask app configuration
-    app.config['SECRET_KEY'] = secret_key_bytes
+    # Decode the base64 encoded secret key using urlsafe_b64decode
+    try:
+        secret_key_bytes = base64.urlsafe_b64decode(secret_key_env)
+        # Set the secret key in the Flask app configuration
+        app.config['SECRET_KEY'] = secret_key_bytes
+    except Exception as e:
+        print("Error decoding base64 string:", e)
+        # Handle the error appropriately, such as logging and exiting the application
 else:
     raise RuntimeError("No secret key found in environment variable 'SECRET_KEY_ENV'")
 
