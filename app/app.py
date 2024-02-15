@@ -28,14 +28,15 @@ allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 secret_key_env = os.getenv('SECRET_KEY_ENV')
 
 if secret_key_env:
+    # Encode the string as ASCII before decoding it
+    encoded_secret_key_bytes = secret_key_env.encode('ascii')
     # Decode the base64 encoded secret key
-    secret_key_bytes = base64.b64decode(secret_key_env)
+    secret_key_bytes = base64.b64decode(encoded_secret_key_bytes)
     # Set the secret key in the Flask app configuration
     app.config['SECRET_KEY'] = secret_key_bytes
 else:
     raise RuntimeError("No secret key found in environment variable 'SECRET_KEY_ENV'")
 
-app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE')
 
 csrf = CSRFProtect(app)
 
