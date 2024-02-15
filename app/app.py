@@ -36,7 +36,7 @@ CORS(app, resources={r"/*": {"origins": allowed_origins, "send_wildcard": True}}
 Session(app)
 
 metrics = PrometheusMetrics(app)
-metrics.info('app_info', 'Application info', version='1.0.4', app_name='finbiz_app')
+metrics.info('app_info', 'Application info', version='0.46.0', app_name='finbiz_app')
 
 @app.route('/')
 def hello_world():
@@ -47,9 +47,9 @@ def health():
     status = '200 OK'
     response_headers = [
         ('Content-type', 'text/plain'),
-        ('Content-Length', str(len(data)))
+        ('Content-Length', '0')  # Length of an empty response
     ]
-    return status, response_headers
+    return Response(status=status, headers=response_headers)
 
 @app.route('/stocks/analyze', methods=['GET', 'POST'])
 def display_analysis():
