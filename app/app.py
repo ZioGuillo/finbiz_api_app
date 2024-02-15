@@ -29,10 +29,16 @@ allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 encoded_secret_key = os.getenv('SECRET_KEY_ENV')
 
 # Add padding if necessary to make it a valid base64 string
-encoded_secret_key += '=' * ((4 - len(encoded_secret_key) % 4) % 4)
+padding = len(encoded_secret_key) % 4
+if padding != 0:
+    encoded_secret_key += '=' * (4 - padding)
 
 # Decode the base64 encoded string
-decoded_secret_key = base64.b64decode(encoded_secret_key)
+try:
+    decoded_secret_key = base64.b64decode(encoded_secret_key)
+except binascii.Error as e:
+    print("Error decoding base64 string:", e)
+    # Handle the error appropriately, such as logging and exiting the application
 
 # Set the decoded secret key in the Flask app configuration
 app.config['SECRET_KEY'] = decoded_secret_key
