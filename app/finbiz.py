@@ -150,5 +150,16 @@ def analyze_stock(stock_data):
             "VAR_puntual_3_month": var_puntual_3_month
         }
     }
+    
+    final_validation_data = {
+        symbol: {
+            "Final_validation": {
+                "Decision Medium Term": decision_medium_term,
+                "Risk": risk,
+                "Decision Medium Term vs Risk": decision_medium_term_vs_risk,
+                "stock_grow": grow
+                }
+            }
+        }
 
-    return results
+    return results, final_validation_data
