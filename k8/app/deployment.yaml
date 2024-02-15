@@ -21,6 +21,14 @@ spec:
       containers:
         - name: api-fintech
           image: pcisnerp/finbiz_api_app:0.33.0
+          env:
+            - name: SECRET_KEY_ENV
+              valueFrom:
+                secretKeyRef:
+                  name: secret-key-env
+                  key: SECRET_KEY_ENV
+            - name: ALLOWED_ORIGINS
+              value: "*"
           resources:
             limits:
               cpu: "1"
@@ -30,6 +38,13 @@ spec:
               memory: "500Mi"
           ports:
             - containerPort: 5000
+      tolerations:
+        - key: sonarqube
+          operator: Equal
+          value: "true"
+          effect: NoSchedule
+      nodeSelector:
+        type: no-arm
 ---
 apiVersion: v1
 kind: Service
@@ -48,4 +63,12 @@ spec:
       port: 9100
       targetPort: 9100
       protocol: TCP
-
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secret-key-env
+  namespace: api-fintech
+type: Opaque
+data:
+  SECRET_KEY_ENV: QUREcDFVTzlHV1hQMFNQYnltMFpIQSE=

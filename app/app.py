@@ -25,7 +25,18 @@ csrf = CSRFProtect(app)
 allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 
 # Use environment variables for configuration
-app.config['SECRET_KEY'] = base64.b64decode(os.getenv('SECRET_KEY_ENV'))
+# Get the base64 encoded secret key from the environment variable
+encoded_secret_key = os.getenv('SECRET_KEY_ENV')
+
+# Add padding if necessary to make it a valid base64 string
+encoded_secret_key += '=' * ((4 - len(encoded_secret_key) % 4) % 4)
+
+# Decode the base64 encoded string
+decoded_secret_key = base64.b64decode(encoded_secret_key)
+
+# Set the decoded secret key in the Flask app configuration
+app.config['SECRET_KEY'] = decoded_secret_key
+
 app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE')
 
 CORS(app, resources={r"/*": {"origins": allowed_origins, "send_wildcard": True}})
