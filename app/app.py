@@ -15,6 +15,7 @@ from flask_wtf.csrf import generate_csrf
 from form_tool import FormTool  # Import the YourForm class from the appropriate module
 import binascii
 import secrets
+from flask import Response
 
 secret_key = secrets.token_hex(16)  # 16 bytes (128 bits) is a common length for secret keys
 
