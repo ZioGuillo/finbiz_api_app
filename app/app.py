@@ -14,7 +14,9 @@ from flask_wtf.csrf import CSRFProtect
 from flask_wtf.csrf import generate_csrf
 from form_tool import FormTool  # Import the YourForm class from the appropriate module
 import binascii
+import secrets
 
+secret_key = secrets.token_hex(16)  # 16 bytes (128 bits) is a common length for secret keys
 
 # Load environment variables from .env file
 load_dotenv()
@@ -24,20 +26,8 @@ app = Flask(__name__)
 allowed_origins = os.getenv("ALLOWED_ORIGINS").split(",")
 
 # Use environment variables for configuration
-# Retrieve the secret key from the Kubernetes secret
-secret_key_env = os.getenv('SECRET_KEY_ENV')
-
-if secret_key_env:
-    # Decode the base64 encoded secret key using urlsafe_b64decode
-    try:
-        secret_key_bytes = base64.urlsafe_b64decode(secret_key_env)
-        # Set the secret key in the Flask app configuration
-        app.config['SECRET_KEY'] = secret_key_bytes
-    except Exception as e:
-        print("Error decoding base64 string:", e)
-        # Handle the error appropriately, such as logging and exiting the application
-else:
-    raise RuntimeError("No secret key found in environment variable 'SECRET_KEY_ENV'")
+app.config['SECRET_KEY'] = secret_key
+app.config['SESSION_TYPE'] = 'filesystem'
 
 csrf = CSRFProtect(app)
 
