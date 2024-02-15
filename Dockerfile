@@ -5,7 +5,7 @@ FROM python:3.9-slim-buster
 WORKDIR /app
 
 # Copy only the requirements file to the container
-COPY requirements.txt .
+COPY ./app/requirements.txt .
 
 # Install any needed packages specified in requirements.txt
 RUN apt-get update && \
