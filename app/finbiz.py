@@ -40,16 +40,30 @@ def analyze_stock(stock_data):
     fper = float(fper) if fper.replace('.', '', 1).isdigit() else 'NONE'
 
     # Calculate var_puntual_month and var_puntual_3_month
-    percentage_var_month = 1 / per if per != 'NONE' else 'NONE'
-    var_puntual_month = stock_price * percentage_var_month if percentage_var_month != 'NONE' else 'NONE'
-    percentage_var_3_month = 1 / fper if fper != 'NONE' else 'NONE'
-    var_puntual_3_month = stock_price * percentage_var_3_month if percentage_var_3_month != 'NONE' else 'NONE'
+    # Calculate percentage_var_month and handle cases where per is 'NONE'
+    percentage_var_month = "{:.4f}".format(1 / float(per)) if per != 'NONE' else 'NONE'
+
+    # Calculate var_puntual_month and handle cases where percentage_var_month is 'NONE'
+    var_puntual_month = "{:.2f}".format(stock_price * float(percentage_var_month)) if percentage_var_month != 'NONE' else 'NONE'
+
+    # Calculate percentage_var_3_month and handle cases where fper is 'NONE'
+    percentage_var_3_month = "{:.4f}".format(1 / float(fper)) if fper != 'NONE' else 'NONE'
+
+    # Calculate var_puntual_3_month and handle cases where percentage_var_3_month is 'NONE'
+    var_puntual_3_month = "{:.2f}".format(stock_price * float(percentage_var_3_month)) if percentage_var_3_month != 'NONE' else 'NONE'
 
     # Criteria 1: Estimates Targets
-    mensual_value_target_monthly = stock_price + var_puntual_month if var_puntual_month != 'NONE' else 'NONE'
-    target_price_by_banks = float(stock_data.get('Target Price', 'N/A')) if stock_data.get('Target Price', 'N/A') != 'N/A' else 0
-    target_price_indicator = (stock_price * (per / fper)) if (per != 'NONE' and fper != 'NONE') else 0
-    trimestral_value_objective = stock_price + var_puntual_3_month if var_puntual_3_month != 'NONE' else 'NONE'
+    # Calculate mensual_value_target_monthly and handle cases where var_puntual_month is 'NONE'
+    mensual_value_target_monthly = "{:.2f}".format(stock_price + float(var_puntual_month)) if var_puntual_month != 'NONE' else 'NONE'
+
+    # Convert target_price_by_banks to float, handle cases where it's 'N/A'
+    target_price_by_banks = "{:.2f}".format(float(stock_data.get('Target Price', 'N/A'))) if stock_data.get('Target Price', 'N/A') != 'N/A' else 0
+
+    # Calculate target_price_indicator and handle cases where per or fper is 'NONE'
+    target_price_indicator = "{:.2f}".format((stock_price * (float(per) / float(fper)))) if (per != 'NONE' and fper != 'NONE') else 0
+
+    # Calculate trimestral_value_objective and handle cases where var_puntual_3_month is 'NONE'
+    trimestral_value_objective = "{:.2f}".format(stock_price + float(var_puntual_3_month)) if var_puntual_3_month != 'NONE' else 'NONE'
 
     # Second Criteria: Validation Based on Estimated Targets
     validation_objective_monthly = "BUY" if isinstance(mensual_value_target_monthly, float) and mensual_value_target_monthly > stock_price else "NONE"
@@ -101,11 +115,14 @@ def analyze_stock(stock_data):
         
     # Stock Growth Calculation
     # Convert target_price_by_banks to float or set to a default value
-    target_price_by_banks = float(stock_data.get('Target Price', 0)) if stock_data.get('Target Price', 'N/A') != 'N/A' else 0
+    # Convert target_price_by_banks to float, handle cases where it's 'N/A'
+    target_price_by_banks = "{:.2f}".format(float(stock_data.get('Target Price', 'N/A'))) if stock_data.get('Target Price', 'N/A') != 'N/A' else 'N/A'
 
-    stock_price = float(stock_data.get('Final Day Price', 'N/A')) if stock_data.get('Final Day Price', 'N/A') != 'N/A' else 0
-    grow = target_price_by_banks - stock_price if target_price_by_banks and stock_price else 'N/A'
+    # Convert stock_price to float, handle cases where it's 'N/A'
+    stock_price = "{:.2f}".format(float(stock_data.get('Final Day Price', 'N/A'))) if stock_data.get('Final Day Price', 'N/A') != 'N/A' else 'N/A'
 
+    # Calculate grow and format it with 4 decimal places
+    grow = "{:.4f}".format(float(target_price_by_banks) - float(stock_price)) if target_price_by_banks != 'N/A' and stock_price != 'N/A' else 'N/A'
 
     # Structuring the results with the stock symbol in uppercase as the primary key
     results = {
