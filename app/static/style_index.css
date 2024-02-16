@@ -87,3 +87,51 @@ button {
         margin: 0 auto; /* Center the footer */
         text-align: left; /* Align the text to the left within the footer */
     }
+    
+    .stock-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .input-wrapper {
+        display: flex;
+        justify-content: center;
+        width: 100%; /* Ensure the input wrapper spans the full width */
+    }
+    
+    input[type="text"] {
+        width: 20%; /* Set the width of the text input */
+    }
+    
+    .submit-btn {
+        padding: 8px 16px; /* Adjust padding to fit the text */
+        border-radius: 20px; /* Add rounded corners */
+        background-color: #007bff; /* Button background color */
+        color: white; /* Button text color */
+        border: none; /* Remove border */
+        cursor: pointer; /* Add cursor pointer */
+        transition: background-color 0.3s; /* Smooth transition for hover effect */
+    }
+    
+    .submit-btn:hover {
+        background-color: #0056b3; /* Darker background color on hover */
+    }
+    
+    /* Media query for mobile devices */
+    @media only screen and (max-width: 600px) {
+        .input-wrapper {
+            flex-direction: column; /* Change flex direction to stack elements vertically */
+            align-items: center; /* Center align items */
+        }
+    
+        input[type="text"] {
+            width: 50%; /* Set the width of the text input to full width */
+        }
+    
+        .submit-btn {
+            width: fit-content; /* Set the width of the button based on content */
+            margin-top: 10px; /* Adjust margin as needed */
+        }
+    }
+    
