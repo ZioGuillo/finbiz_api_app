@@ -19,7 +19,7 @@
         <form class="stock-form" action="/stocks/analyze" method="post">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <div class="input-wrapper">
-                <input type="text" id="symbol" name="symbol" placeholder="Enter Stock Symbol" required>
+                <input type="text" id="symbol" name="symbol" placeholder="Stock Symbol" required>
                 <input type="submit" value="Analyze" class="submit-btn">
             </div>
         </form>
