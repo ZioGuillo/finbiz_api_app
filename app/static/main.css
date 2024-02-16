@@ -2,14 +2,14 @@
         font-family: 'Arial', sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #1B2A41; /* Dark blue, reminiscent of Superman */
-        color: #FFFFFF; /* White text for contrast */
+        background-color: #03011d /* Dark blue, reminiscent of Superman */ !important;
+        color: #0d090973; /* color text for contrast */
         line-height: 1.6; /* Spacing between lines */
     }
     .container {
         max-width: 800px; /* Adjusted for wider screens */
         margin: 20px auto; /* Centering the container with margin */
-        background: #283593; /* A slightly lighter blue for the container */
+        background: #cfd0d7; /* A slightly lighter blue for the container */
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Larger shadow for a "lifted" effect */
@@ -41,14 +41,16 @@
         margin: 20px auto; /* Center the button */
         text-align: center;
         background-color: #D32F2F; /* Superman red for the button */
-        color: #FFFFFF;
+        color: #f2e9e9;
         padding: 10px 20px;
         text-decoration: none;
         border-radius: 5px;
         transition: background-color 0.3s;
     }
     a.button:hover {
-        background-color: #B71C1C; /* Darker red on hover */
+        background-color: #000; /* Darker red on hover */
+        color: #ffffff; /* color text for contrast */
+        line-height: 1.6; /* Spacing between lines */
     }
 
     /* Responsive Design */
@@ -79,6 +81,7 @@
         }
         tr:nth-child(even) {
             background-color: hsl(0, 81%, 17%);
+            color: white;
         }
         .container table tr:hover td {
             background-color: transparent; /* Make cell background transparent on hover */
@@ -90,4 +93,22 @@
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
+        }
+        header {
+            font-size: 0.7em;
+            width: 80%; /* Adjust the width as needed */
+            margin: 0 auto; /* Center the footer */
+            text-align: left; /* Align the text to the left within the footer */
+            /* color: #ffffff; color text for contrast */
+        }
+        footer {
+            font-size: 0.9em;
+            width: 80%; /* Adjust the width as needed */
+            margin: 0 auto; /* Center the footer */
+            text-align: left; /* Align the text to the left within the footer */
+            color: #ffffff; /* color text for contrast */
+            line-height: 1.6; /* Spacing between lines */
+        }
+        caption {
+            display: none; /* Hide the caption */
         }

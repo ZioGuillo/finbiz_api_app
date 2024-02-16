@@ -7,7 +7,7 @@
     <title>Stock Analysis Tool</title>
 </head>
 <body>
-    <div style="text-align: center;">
+    <div class="container">
         <h1>Stock Analysis Tool</h1>
         <form action="/stocks/analyze" method="post">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -19,8 +19,17 @@
     
     <!-- Footer Disclaimer -->
     <div style="text-align: center;">
-        <footer>
-            <p>⚠️ Disclaimer: This Stock Analysis Application is intended for informational purposes only and should not be construed as financial advice, investment recommendations, or endorsements. The analysis provided by this tool is based on algorithms, market data, and historical trends, and may not accurately predict future performance. Investing in the stock market involves inherent risks, including the potential loss of principal. It's essential to conduct thorough research, consult with a qualified financial advisor, and carefully consider your own risk tolerance, investment goals, and financial situation before making any investment decisions.</p>
+        <footer style="font-size: 0.7em;">
+            <p>⚠️ Disclaimer: This Stock Analysis Application is intended for 
+                informational purposes only and should not be construed as 
+                financial advice, investment recommendations, or endorsements. 
+                The analysis provided by this tool is based on algorithms, 
+                market data, and historical trends, and may not accurately predict 
+                future performance. Investing in the stock market involves inherent 
+                risks, including the potential loss of principal. It's essential to 
+                conduct thorough research, consult with a qualified financial advisor, 
+                and carefully consider your own risk tolerance, investment goals, and 
+                financial situation before making any investment decisions.</p>
         </footer>
     </div>
     

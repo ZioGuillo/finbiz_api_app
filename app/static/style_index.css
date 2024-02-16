@@ -1,6 +1,14 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
+    background-color: #03011d /* Dark blue, reminiscent of Superman */ !important;
+    color: #ffffff /* color text for contrast */ !important;
+    line-height: 1.6; /* Spacing between lines */
+}
+
+.container {
+    text-align: center;
+    padding-bottom: 20px; /* Adjust the value as needed */
 }
 
 .search-container {
@@ -71,4 +79,11 @@ button {
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
+    }
+
+    footer {
+        font-size: 0.9em;
+        width: 80%; /* Adjust the width as needed */
+        margin: 0 auto; /* Center the footer */
+        text-align: left; /* Align the text to the left within the footer */
     }
