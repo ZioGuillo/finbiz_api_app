@@ -1,10 +1,13 @@
 from finvizfinance.quote import finvizfinance
 
 def process_stock_data(symbol):
-    # Initialize the stock object
     try:
+        # Initialize the stock object
         stock = finvizfinance(symbol)
         stock_fundamentals = stock.ticker_fundament()
+
+        # Get the name of the company
+        company_name = stock_fundamentals.get('Company', 'N/A')
 
         # Extract the required data
         stock_price = float(stock_fundamentals.get('Price', 'N/A'))
@@ -13,8 +16,10 @@ def process_stock_data(symbol):
         beta = stock_fundamentals.get('Beta', 'N/A')
         target_price = stock_fundamentals.get('Target Price', 'N/A')
 
+        # Create a dictionary with processed data
         processed_data = {
             'symbol': symbol,
+            'company_name': company_name,
             'Final Day Price': stock_price,
             'PER': per,
             'FPER': fper,
@@ -24,12 +29,12 @@ def process_stock_data(symbol):
 
     except Exception as e:
         # Handle specific error
-        return {'error': f'Unable to find data for symbol {symbol}'}
-        #return {'error': f'Unable to find data for symbol {symbol}: {str(e)}'}
+        return {'error': f'Unable to find data for symbol {symbol}: {str(e)}'}
 
     return processed_data
 
 def analyze_stock(stock_data):
+    company_name = stock_data.get('company_name', 'UNKNOWN')
     symbol = stock_data.get('symbol', 'UNKNOWN').upper()
     per = stock_data.get('PER', '-')
     fper = stock_data.get('FPER', '-')
@@ -157,6 +162,7 @@ def analyze_stock(stock_data):
                 "Decision Medium Term vs Risk": decision_medium_term_vs_risk,
                 "stock_grow": grow
             },
+            "Company_name": company_name,
             "Stock_price": stock_price,
             "PER": per,
             "FPER": fper,
