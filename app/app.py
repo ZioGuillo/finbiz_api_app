@@ -1,21 +1,18 @@
-import time
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session
-from flask_cors import CORS  # Import CORS
-from flask_session import Session  # You might need to install flask-session
-# Ensure stocks_app is correctly imported from your stocks module
-from stocks import stocks_app, process_stock_data, analyze_stock
-from prometheus_flask_exporter import PrometheusMetrics
-from flask import Flask
-from flask_session import Session
 import os
-from dotenv import load_dotenv
 import base64
-from flask_wtf.csrf import CSRFProtect
-from flask_wtf.csrf import generate_csrf
-from form_tool import FormTool  # Import the YourForm class from the appropriate module
 import binascii
 import secrets
-from flask import Response
+import time
+from dotenv import load_dotenv
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash, Response
+from flask_cors import CORS
+from flask_session import Session
+from prometheus_flask_exporter import PrometheusMetrics
+from flask_wtf.csrf import CSRFProtect, generate_csrf
+from form_tool import FormTool  # Assuming FormTool is the correct import based on your context
+
+# Ensure stocks_app, process_stock_data, and analyze_stock are correctly imported from your stocks module
+from stocks import stocks_app, process_stock_data, analyze_stock
 
 secret_key = secrets.token_hex(16)  # 16 bytes (128 bits) is a common length for secret keys
 
@@ -80,11 +77,20 @@ def display_analysis():
         session['symbol'] = symbol
         return redirect(url_for('show_analysis_results'))
 
+
 @app.route('/stocks/results')
 def show_analysis_results():
-    analysis_results = session.get('analysis_results')
-    symbol = session.get('symbol')
-    return render_template('analysis_results.html', results=analysis_results, symbol=symbol)
+    analysis_results = session.get('analysis_results', {})
+    symbol = session.get('symbol', '').upper()
+
+    # Ensure the template receives the structure it expects
+    if symbol not in analysis_results:
+        flash('The requested symbol does not exist. Please try again.', 'error')
+        return render_template('error_page.html')
+    else:
+        # Pass the entire analysis_results and symbol to the template
+        return render_template('analysis_results.html', results=analysis_results, symbol=symbol)
+
 
 # Generate CSRF token for inclusion in the form
 @app.context_processor

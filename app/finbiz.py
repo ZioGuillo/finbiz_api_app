@@ -1,5 +1,12 @@
 from finvizfinance.quote import finvizfinance
 
+def safe_float_convert(value, default=0.0):
+    """Attempts to convert a value to float, returns default if conversion fails."""
+    try:
+        return float(value)
+    except ValueError:
+        return default
+
 def process_stock_data(symbol):
     try:
         # Initialize the stock object
@@ -10,6 +17,7 @@ def process_stock_data(symbol):
         company_name = stock_fundamentals.get('Company', 'N/A')
 
         # Extract the required data
+        # check if it is a numeric value first, otherwise, use a default value such as 0.0
         stock_price = float(stock_fundamentals.get('Price', 'N/A'))
         per = stock_fundamentals.get('P/E', 'N/A')
         fper = stock_fundamentals.get('Forward P/E', 'N/A')
@@ -38,7 +46,8 @@ def analyze_stock(stock_data):
     symbol = stock_data.get('symbol', 'UNKNOWN').upper()
     per = stock_data.get('PER', '-')
     fper = stock_data.get('FPER', '-')
-    stock_price = float(stock_data.get('Final Day Price', 'N/A'))
+    # Use the safe_float_convert function to safely convert 'Final Day Price'
+    stock_price = safe_float_convert(stock_data.get('Final Day Price', 'N/A'), 0.0)
 
     # Check for valid PER and FPER
     per = float(per) if per.replace('.', '', 1).isdigit() else 'NONE'
@@ -61,11 +70,11 @@ def analyze_stock(stock_data):
     # Calculate mensual_value_target_monthly and handle cases where var_puntual_month is 'NONE'
     mensual_value_target_monthly = "{:.2f}".format(stock_price + float(var_puntual_month)) if var_puntual_month != 'NONE' else 'NONE'
 
-    # Convert target_price_by_banks to float, handle cases where it's 'N/A'
-    target_price_by_banks = "{:.2f}".format(float(stock_data.get('Target Price', 'N/A'))) if stock_data.get('Target Price', 'N/A') != 'N/A' else 0
+    # Ensure target_price_by_banks is a float. You've handled 'N/A', so this should be okay.
+    target_price_by_banks = float(stock_data.get('Target Price', 0))  # Default to 0 if 'N/A'
 
-    # Calculate target_price_indicator and handle cases where per or fper is 'NONE'
-    target_price_indicator = "{:.2f}".format((stock_price * (float(per) / float(fper)))) if (per != 'NONE' and fper != 'NONE') else 0
+    # Convert target_price_indicator to float for comparison
+    target_price_indicator = float((stock_price * (float(per) / float(fper)))) if (per != 'NONE' and fper != 'NONE') else 0
 
     # Calculate trimestral_value_objective and handle cases where var_puntual_3_month is 'NONE'
     trimestral_value_objective = "{:.2f}".format(stock_price + float(var_puntual_3_month)) if var_puntual_3_month != 'NONE' else 'NONE'
@@ -84,8 +93,8 @@ def analyze_stock(stock_data):
 
     # Additional Criteria: Validation Based on Target Price
     target_prices_vs_objectives_monthly = "BUY" if isinstance(mensual_value_target_monthly, float) and target_price_by_banks > mensual_value_target_monthly else "NONE"
+    # Now do the comparison
     target_prices_indicators_vs_target_prices_bank = "BUY" if target_price_indicator > target_price_by_banks else "NONE"
-
     # Counting BUY validations
     futures_values_count = [target_prices_vs_objectives_monthly, target_prices_indicators_vs_target_prices_bank].count("BUY")
 
