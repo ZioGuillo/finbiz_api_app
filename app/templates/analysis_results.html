@@ -15,10 +15,7 @@
 </head>
 <body>
     <div class="container">
-            <h1>Stock Analysis Results for {{ results[symbol]['Company_name'] }}</h1>
-        <header>
-            <p>⚠️ Disclaimer: This Stock Analysis Application is intended for informational purposes only and should not be construed as financial advice, investment recommendations, or endorsements. The analysis provided by this tool is based on algorithms, market data, and historical trends, and may not accurately predict future performance. Investing in the stock market involves inherent risks, including the potential loss of principal. It's essential to conduct thorough research, consult with a qualified financial advisor, and carefully consider your own risk tolerance, investment goals, and financial situation before making any investment decisions.</p>
-        </header>
+        <h1>Stock Analysis Results for {{ results[symbol]['Company_name'] }}</h1>    
 
         <h2>Stock Metrics: {{ symbol|upper }}</h2>
         <table>
@@ -216,6 +213,13 @@
         <a href="/" class="button">Go back</a>
     </div>
     <footer style="text-align: center;">
+        <p>
+            ⚠️ Disclaimer: This tool is for information only, not financial 
+            advice or investment recommendations. Analyses are algorithm-based 
+            and may not predict future market performance accurately. Investing 
+            involves risks, including loss of principal. Always research thoroughly 
+            and consult a financial advisor before investing.</p>
+        <br>        
         <p>© 2024 Stock Analysis App</p>
     </footer>
 
