@@ -14,7 +14,7 @@ from form_tool import FormTool  # Assuming FormTool is the correct import based 
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-secret-key')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY_ENV', 'default-secret-key')
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_PERMANENT'] = True
