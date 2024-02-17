@@ -13,8 +13,11 @@ from form_tool import FormTool  # Assuming FormTool is the correct import based 
 # Load environment variables from .env file
 load_dotenv()
 
+secret_key = secrets.token_hex(16)  # 16 bytes (128 bits) is a common length for secret keys
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY_ENV', 'default-secret-key')
+# Use environment variables for configuration
+app.config['SECRET_KEY'] = secret_key
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_PERMANENT'] = True
