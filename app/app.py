@@ -1,124 +1,58 @@
-import os
-import secrets
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash, Response, flash
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash, Response
 from flask_cors import CORS
 from flask_session import Session
 from prometheus_flask_exporter import PrometheusMetrics
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from dotenv import load_dotenv
+from flask_caching import Cache
+from apscheduler.schedulers.background import BackgroundScheduler
+import atexit
+import os
+import secrets
 
-import plotly.graph_objects as go
-import numpy as np
-
-# Assuming stocks_app, process_stock_data, and analyze_stock are correctly imported from your stocks module
+# Assuming get_last_prices_by_all_sector, stocks_app, process_stock_data, and analyze_stock are correctly imported
+from stock_list import get_last_prices_by_all_sector
 from stocks import stocks_app, process_stock_data, analyze_stock
-from form_tool import FormTool  # Assuming FormTool is the correct import based on your context
+from form_tool import FormTool
+import plotly.graph_objects as go
 
-# Load environment variables from .env file
 load_dotenv()
 
-secret_key = secrets.token_hex(16)  # 16 bytes (128 bits) is a common length for secret keys
-
 app = Flask(__name__)
-# Use environment variables for configuration
-app.config['SECRET_KEY'] = secret_key
-app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SESSION_COOKIE_SECURE'] = True
-app.config['SESSION_PERMANENT'] = True
-app.config['PERMANENT_SESSION_LIFETIME'] = int(os.getenv('SESSION_LIFETIME', 3600))  # Default to 1 hour
+app.config.update(
+    SECRET_KEY=secrets.token_hex(16),
+    SESSION_TYPE='filesystem',
+    SESSION_COOKIE_SECURE=True,
+    SESSION_PERMANENT=True,
+    PERMANENT_SESSION_LIFETIME=int(os.getenv('SESSION_LIFETIME', 3600)),
+    CACHE_TYPE='simple'
+)
 
-# Initialize extensions
+cache = Cache(app)
+cache.init_app(app)
 csrf = CSRFProtect(app)
 CORS(app, supports_credentials=True)
 Session(app)
 metrics = PrometheusMetrics(app)
 metrics.info('app_info', 'Application info', version='1.0.0', app_name='finbiz_app')
 
+scheduler = BackgroundScheduler(daemon=True)
+scheduler.start()
+
+def update_stock_data():
+    """Fetch and cache the stock data."""
+    stock_data = get_last_prices_by_all_sector()  # Assume this fetches data correctly
+    cache.set('stock_data', stock_data, timeout=600)
+
+scheduler.add_job(func=update_stock_data, trigger="interval", minutes=10)
+atexit.register(lambda: scheduler.shutdown())
+
 @app.route('/')
 def index():
-    # Fetch stock data for each sector. This is a placeholder.
-    # You would replace this with actual data fetching logic.
-    stock_data_by_sector = {
-        'Technology': [
-            {'symbol': 'AAPL', 'price': '150.00', 'company_name': 'Apple Inc.'},
-            {'symbol': 'MSFT', 'price': '280.00', 'company_name': 'Microsoft Corporation'},
-            {'symbol': 'GOOGL', 'price': '2700.00', 'company_name': 'Alphabet Inc.'},
-            {'symbol': 'META', 'price': '320.00', 'company_name': 'Meta Platforms, Inc.'},
-            {'symbol': 'INTC', 'price': '48.00', 'company_name': 'Intel Corporation'}
-        ],
-        'Health Care': [
-            {'symbol': 'JNJ', 'price': '170.00', 'company_name': 'Johnson & Johnson'},
-            {'symbol': 'PFE', 'price': '42.00', 'company_name': 'Pfizer Inc.'},
-            {'symbol': 'MRK', 'price': '76.00', 'company_name': 'Merck & Co., Inc.'},
-            {'symbol': 'ABBV', 'price': '105.00', 'company_name': 'AbbVie Inc.'},
-            {'symbol': 'TMO', 'price': '480.00', 'company_name': 'Thermo Fisher Scientific Inc.'}
-        ],
-        'Financials': [
-            {'symbol': 'JPM', 'price': '125.00', 'company_name': 'JPMorgan Chase & Co.'},
-            {'symbol': 'BAC', 'price': '30.00', 'company_name': 'Bank of America Corp'},
-            {'symbol': 'WFC', 'price': '45.00', 'company_name': 'Wells Fargo & Company'},
-            {'symbol': 'C', 'price': '65.00', 'company_name': 'Citigroup Inc.'},
-            {'symbol': 'GS', 'price': '350.00', 'company_name': 'The Goldman Sachs Group, Inc.'}
-        ],
-        'Consumer Discretionary': [
-            {'symbol': 'AMZN', 'price': '105.00', 'company_name': 'Amazon.com, Inc.'},
-            {'symbol': 'TSLA', 'price': '900.00', 'company_name': 'Tesla, Inc.'},
-            {'symbol': 'HD', 'price': '310.00', 'company_name': 'The Home Depot, Inc.'},
-            {'symbol': 'MCD', 'price': '240.00', 'company_name': 'McDonald\'s Corporation'},
-            {'symbol': 'NKE', 'price': '130.00', 'company_name': 'Nike, Inc.'}
-        ],
-        'Consumer Staples': [
-            {'symbol': 'PG', 'price': '140.00', 'company_name': 'The Procter & Gamble Company'},
-            {'symbol': 'KO', 'price': '60.00', 'company_name': 'The Coca-Cola Company'},
-            {'symbol': 'PEP', 'price': '165.00', 'company_name': 'PepsiCo, Inc.'},
-            {'symbol': 'WMT', 'price': '135.00', 'company_name': 'Walmart Inc.'},
-            {'symbol': 'COST', 'price': '490.00', 'company_name': 'Costco Wholesale Corporation'}
-        ],
-        'Energy': [
-            {'symbol': 'XOM', 'price': '90.00', 'company_name': 'Exxon Mobil Corporation'},
-            {'symbol': 'CVX', 'price': '115.00', 'company_name': 'Chevron Corporation'},
-            {'symbol': 'COP', 'price': '95.00', 'company_name': 'ConocoPhillips'},
-            {'symbol': 'SLB', 'price': '40.00', 'company_name': 'Schlumberger Limited'},
-            {'symbol': 'EOG', 'price': '110.00', 'company_name': 'EOG Resources, Inc.'}
-        ],
-        'Industrials': [
-            {'symbol': 'GE', 'price': '75.00', 'company_name': 'General Electric Company'},
-            {'symbol': 'MMM', 'price': '150.00', 'company_name': '3M Company'},
-            {'symbol': 'BA', 'price': '200.00', 'company_name': 'The Boeing Company'},
-            {'symbol': 'HON', 'price': '180.00', 'company_name': 'Honeywell International Inc.'},
-            {'symbol': 'UNP', 'price': '210.00', 'company_name': 'Union Pacific Corporation'}
-        ],
-        # Add other sectors following the same structure
-        'Utilities': [
-            {'symbol': 'NEE', 'price': '75.00', 'company_name': 'NextEra Energy, Inc.'},
-            {'symbol': 'DUK', 'price': '100.00', 'company_name': 'Duke Energy Corporation'},
-            {'symbol': 'SO', 'price': '62.00', 'company_name': 'The Southern Company'},
-            {'symbol': 'AEP', 'price': '80.00', 'company_name': 'American Electric Power Company, Inc.'},
-            {'symbol': 'EXC', 'price': '43.00', 'company_name': 'Exelon Corporation'}
-        ],
-        'Real Estate': [
-            {'symbol': 'AMT', 'price': '250.00', 'company_name': 'American Tower Corporation'},
-            {'symbol': 'PLD', 'price': '110.00', 'company_name': 'Prologis, Inc.'},
-            {'symbol': 'CCI', 'price': '170.00', 'company_name': 'Crown Castle International Corp.'},
-            {'symbol': 'EQIX', 'price': '700.00', 'company_name': 'Equinix, Inc.'},
-            {'symbol': 'SPG', 'price': '120.00', 'company_name': 'Simon Property Group, Inc.'}
-        ],
-        'Materials': [
-            {'symbol': 'LIN', 'price': '290.00', 'company_name': 'Linde plc'},
-            {'symbol': 'ECL', 'price': '160.00', 'company_name': 'Ecolab Inc.'},
-            {'symbol': 'SHW', 'price': '250.00', 'company_name': 'The Sherwin-Williams Company'},
-            {'symbol': 'APD', 'price': '280.00', 'company_name': 'Air Products and Chemicals, Inc.'},
-            {'symbol': 'DD', 'price': '72.00', 'company_name': 'DuPont de Nemours, Inc.'}
-        ],
-        'Telecommunication Services': [
-            {'symbol': 'T', 'price': '24.00', 'company_name': 'AT&T Inc.'},
-            {'symbol': 'VZ', 'price': '50.00', 'company_name': 'Verizon Communications Inc.'},
-            {'symbol': 'TMUS', 'price': '130.00', 'company_name': 'T-Mobile US, Inc.'},
-            {'symbol': 'CHTR', 'price': '600.00', 'company_name': 'Charter Communications, Inc.'},
-            {'symbol': 'SBAC', 'price': '206.00', 'company_name': 'SBA Communications Corporation'}
-            # Placeholder for another Telecommunication Service company if needed
-        ]
-    }
+    stock_data_by_sector = cache.get('stock_data')
+    if not stock_data_by_sector:
+        flash("Stock data is currently being updated. Please try again shortly.", "info")
+        return redirect(url_for('index'))
 
      # Prepare data for the heat map
     z_values = []  # This will contain the heat map values
@@ -233,11 +167,11 @@ def request_wants_json():
 
 @app.route('/error')
 def error_page():
-    # Here, you can customize the error message or use a generic one.
     return render_template('error_page.html', error_message="An error occurred.")
 
 # Register the blueprint from the stocks module
 app.register_blueprint(stocks_app, url_prefix='/stocks')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    update_stock_data()
+    app.run(host='0.0.0.0', port=5000, debug=False)

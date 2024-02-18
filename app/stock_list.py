@@ -72,7 +72,7 @@ def get_last_prices_by_all_sector():
 
             # Delay after processing each batch, except for the last one
             if i + batch_size < len(symbols):
-                print(f"Waiting for {request_delay} seconds...")
+                # print(f"Waiting for {request_delay} seconds...")
                 time.sleep(request_delay)
 
         stock_data_by_sector[sector] = sector_data
@@ -80,8 +80,8 @@ def get_last_prices_by_all_sector():
     return stock_data_by_sector
 
 # Example usage
-stock_data_all_sector = get_last_prices_by_all_sector()
-print(json.dumps(stock_data_all_sector, indent=4))
+# stock_data_all_sector = get_last_prices_by_all_sector()
+# print(json.dumps(stock_data_all_sector, indent=4))
 
 # Example usage:
 # selected_sector = 'Telecommunication Services'
