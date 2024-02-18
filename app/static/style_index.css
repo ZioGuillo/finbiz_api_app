@@ -11,6 +11,11 @@ body {
     padding-bottom: 20px; /* Adjust the value as needed */
 }
 
+.container-heatmap {
+    text-align: center;
+    padding-bottom: 20px; /* Adjust the value as needed */
+}
+
 .search-container {
     margin-bottom: 20px;
 }
@@ -52,6 +57,9 @@ h2 {
         width: auto; /* Full width on smaller screens */
         margin: 10px; /* Less margin on smaller screens */
         padding: 10px; /* Less padding on smaller screens */
+    }
+    .container-heatmap {
+        display: none; /* Hide the caption */
     }
     h1 {
         font-size: 24px; /* Smaller font size for the heading on small screens */

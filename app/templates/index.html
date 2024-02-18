@@ -27,7 +27,7 @@
     
     <h2>Stocks by Sector</h2>
     <!-- Responsive centering of the div on the page -->
-    <div class="container">{{ plot_html|safe }}</div>
+    <div class="container-heatmap">{{ plot_html|safe }}</div>
     <div class="grid-container">
         {% for sector, stocks in stock_data_by_sector.items() %}
         <div class="table-container">
