@@ -33,6 +33,12 @@ button {
     margin-bottom: 10px;
 }
 
+h2 {
+    text-align: center; /* Center the text horizontally */
+    margin-top: 20px; /* Add some space on the top, adjust as needed */
+    margin-bottom: 20px; /* Add some space on the bottom, adjust as needed */
+}
+
 .block h3 {
     margin-top: 0;
 }
@@ -49,6 +55,11 @@ button {
     }
     h1 {
         font-size: 24px; /* Smaller font size for the heading on small screens */
+    }
+    h2 {
+        text-align: center; /* Center the text horizontally */
+        margin-top: 20px; /* Add some space on the top, adjust as needed */
+        margin-bottom: 20px; /* Add some space on the bottom, adjust as needed */
     }
 }
     /* Your existing styles */
@@ -135,3 +146,78 @@ button {
         }
     }
     
+  /* Basic styling for tables */
+  table, th, td {
+    border: 1px solid black; /* Keep the borders for clarity */
+    border-collapse: collapse;
+    padding: 8px; /* Padding inside cells */
+    text-align: left; /* Align text to the left in cells */
+}
+    th {
+        background-color: #8B0000; /* Dark red color for headers */
+        color: white; /* White text color for better readability */
+    }
+    td {
+        background-color: #00008B; /* Dark blue for table data cells */
+        color: white; /* White text color for better readability */
+    }
+
+    /* Styling for the container wrapping tables to remove additional padding and ensure full data size is used */
+    .table-container {
+        overflow-x: auto; /* Allow horizontal scrolling if necessary */
+        border: none; /* Remove border */
+        box-shadow: none; /* Remove shadow for a cleaner look */
+    }
+
+    /* Grid layout adjustments */
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(3, auto); /* Adjust columns to fit content */
+        gap: 0; /* Remove gap between grid items */
+        padding: 0; /* Remove padding around the grid container */
+    }
+
+    /* Media query for tablets and below */
+    @media (max-width: 768px) {
+        th, td {
+            padding: 5px; /* Smaller padding on smaller devices */
+        }
+        .grid-container {
+            grid-template-columns: 1fr; /* Stack tables vertically on small screens */
+        }
+    }
+
+    /* Responsive table styling */
+    .table-responsive {
+        display: block;
+        width: auto; /* Adjust width to auto to fit data size */
+        overflow-x: auto; /* Enable horizontal scrolling */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+    }
+
+    /* Adjustments for the table header */
+
+            /* Center and make responsive the div containing the heat map */
+            .plot-container {
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 90%; /* Maximum width of the container to maintain responsiveness */
+                text-align: center; /* Center the content inside the div */
+            }
+    
+            /* Responsive styling for smaller screens, such as tablets and mobile phones */
+            @media (max-width: 768px) {
+                .plot-container {
+                    max-width: 100%; /* Allow the heat map to use the full width on small screens */
+                }
+            }
+
+            .centered-content {
+                text-align: center; /* Centers inline and inline-block elements within */
+            }
+            img {
+                /* If the image is not inline by default, this makes it center within .centered-content */
+                display: inline-block;
+                max-width: 100%; /* Makes the image responsive */
+                height: auto; /* Maintain aspect ratio */
+            }

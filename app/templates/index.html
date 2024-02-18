@@ -25,6 +25,34 @@
         </form>
     </div>
     
+    <h2>Stocks by Sector</h2>
+    <!-- Responsive centering of the div on the page -->
+    <div class="container">{{ plot_html|safe }}</div>
+    <div class="grid-container">
+        {% for sector, stocks in stock_data_by_sector.items() %}
+        <div class="table-container">
+            <h3>{{ sector }}</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stock Symbol</th>
+                        <th>Company Name</th>
+                        <th>Last Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in stocks %}
+                    <tr>
+                        <td>{{ stock['symbol'] }}</td>
+                        <td>{{ stock['company_name'] }}</td>
+                        <td>{{ stock['price'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
     
     <!-- Footer Disclaimer -->
     <footer style="text-align: center;">
