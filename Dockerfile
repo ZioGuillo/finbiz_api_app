@@ -26,6 +26,6 @@ EXPOSE 5000
 
 # Run the command to start the application
 # CMD [ "python", "app.py" ]
-CMD gunicorn -w 4 --bind 0.0.0.0:5000 wsgi:app
+CMD ["gunicorn", "-w", "2", "--bind", "0.0.0.0:5000", "main:app"]
 
 # docker run -d -p 80:5000 hello_app_prod 
