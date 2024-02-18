@@ -19,7 +19,7 @@ RUN apt-get update && \
 
 RUN pip install --upgrade pip --no-cache-dir
 RUN pip install --no-cache-dir -r requirements.txt --src /usr/local/src
-# RUN pip install gunicorn
+RUN pip install gunicorn
 
 # Expose the port that the application will run on
 EXPOSE 5000
